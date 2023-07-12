@@ -14,4 +14,4 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{db_user}:{db_password}@{
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-from app import routes
+# from app import routes
