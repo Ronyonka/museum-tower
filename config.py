@@ -1,0 +1,5 @@
+import os
+
+DATABASE_USERNAME = os.get_env("DB_USERNAME")
+DATABASE_PASSWORD= os.get_env("DB_PASSWORD")
+DATABASE_NAME= os.get_env("DB_NAME")
