@@ -26,9 +26,15 @@ class TenantTransaction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     tenant_id = db.Column(db.Integer, db.ForeignKey('tenants.id'))
     tenant = db.relationship('Tenant', backref=db.backref('transactions', lazy=True))
+    transaction = db.Column(db.Integer)
     transaction_type = db.Column(db.String)
     transaction_date = db.Column(db.Date)
     amount = db.Column(db.Float)
-
+    period= db.Column(db.String)
+    tax= db.Column(db.Float)
+    remarks=db.Column(db.String)
+    exclusive=db.Column(db.Float)
+    tax_amount=db.Column(db.Float)
+    inclusive=db.Column(db.Float)
     def __repr__(self):
         return f'<TenantTransaction(tenant_id={self.tenant_id}, transaction_type={self.transaction_type}, amount={self.amount})>'

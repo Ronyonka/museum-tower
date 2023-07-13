@@ -1,42 +1,67 @@
-import datetime
-from openpyxl import load_workbook
-from .models import Tenant, TenantTransaction
+import pandas as pd
+from app.models import Tenant, TenantTransaction
+from datetime import datetime
 
-def parse_excel_data(file_path):
-    try:
-        workbook = load_workbook(file_path)
-        sheet = workbook.active
 
-        tenants = []
-        tenant_transactions = []
+def parse_excel_data(file_path, db):
+    # Read the Excel file into a pandas DataFrame
+    df = pd.read_excel(file_path)
 
-        for row in sheet.iter_rows(min_row=2, values_only=True):
-            if row[0]:  # Check if the row represents a tenant
-                tenant = Tenant(
-                    name=row[0],
-                    code=row[2],
-                    main_unit_no=row[4],
-                    property=row[6],
-                    general_contact=row[8],
-                    telephone=row[10],
-                    lease_start_date=datetime.datetime.strptime(row[12], '%d/%m/%Y').date(),
-                    lease_end_date=datetime.datetime.strptime(row[14], '%d/%m/%Y').date(),
-                    vacate_date=datetime.datetime.strptime(row[16], '%d/%m/%Y').date() if row[16] else None,
-                    active=True if not row[16] else False
+    tenant=None
+
+    # Loop through each row in the DataFrame
+    for index, row in df.iterrows():
+        if 'tenant' in str(row[0]).lower():
+            # Create or update the Tenant model
+            tenant = Tenant()
+            tenant.name = row[1]
+            tenant.code = row[3]
+            tenant.main_unit_no = row[5]
+            tenant.property_name = row[7]
+            tenant.general_contact = row[9]
+            tenant.telephone = row[11]
+            tenant.lease_start_date =row[13]
+            tenant.lease_end_date = row[15]
+            tenant.vacate_date = row[17]
+            if row[7] == "":
+                tenant.active = True
+            else:
+                tenant.active = False
+            db.session.add(tenant)
+            
+            tenant_id = tenant.id
+        else:
+            if tenant is None:
+                pass
+            else:
+                if row[8] == 0.00:
+                    pass
+
+                transaction= TenantTransaction(
+                    tenant_id = tenant_id,
+                    period=row[0],
+                    transaction_date=row[1],
+                    transaction=row[2],
+                    transaction_type=row[3],
+                    tax=row[4],
+                    remarks=row[5],
+                    exclusive=row[6],
+                    tax_amount=row[7],
+                    inclusive=row[8]
                 )
-                tenants.append(tenant)
+                db.session.add(transaction)
+        if str(row[0]).lower() == 'software supplied by: mda Property systems www.mdapropsys.com':
+            db.session.commit()
+            break
 
-            if row[1] and row[3]:  # Check if the row represents a tenant transaction
-                tenant_transaction = TenantTransaction(
-                    tenant_id=tenant.id,  # Assuming the tenant object has an 'id' attribute
-                    transaction_type=row[1],
-                    transaction_date=datetime.datetime.strptime(row[3], '%d/%m/%Y').date(),
-                    amount=float(row[7])
-                )
-                tenant_transactions.append(tenant_transaction)
+        
 
-        return tenants, tenant_transactions
 
-    except Exception as e:
-        print(f"Error parsing Excel data: {str(e)}")
-        return None, None
+
+# Specify the file path of the Excel file
+file_path = './data/The Museum Tower Middle Block 201901-202212.xlsx'
+
+# Call the parse_excel_data function with the file path
+# parsed_data = parse_excel_data(file_path,db)
+
+
