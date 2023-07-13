@@ -1,29 +1,74 @@
-# Foobar
+# Museum Tower
 
-Foobar is a Python library for dealing with word pluralization.
+Welcome to the **Museum Tower** project repository! This project is a Flask application that manages tenant data and transactions for the Museum Tower property. Follow the instructions below to set up and run the application.
+
+## Prerequisites
+
+Before getting started, ensure you have the following prerequisites installed:
+
+- Python (version 3.6 or higher)
+- PostgreSQL
 
 ## Installation
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
+1. Clone the repository by running the following command:
 
 ```bash
-pip install foobar
+ git clone https://github.com/Ronyonka/museum-tower.git
+```
+2. Change into the project directory:
+```bash
+cd museum-tower
+```
+3. Activate the virtual environment:
+
+For macOS/Linux:
+
+```bash
+source venv/bin/activate
+```
+For Windows:
+
+```bash
+venv\Scripts\activate
+```
+4. Install the required packages from the requirements.txt file:
+```bash
+pip install -r requirements.txt
 ```
 
-## Usage
+## Configuration
+1. Create a .env file in the project root directory.
 
-```python
-import foobar
-
-# returns 'words'
-foobar.pluralize('word')
-
-# returns 'geese'
-foobar.pluralize('goose')
-
-# returns 'phenomenon'
-foobar.singularize('phenomena')
+2. Add the following environment variables to the `.env` file:
 ```
+DB_USERNAME=<your_database_username>
+DB_PASSWORD=<your_database_password>
+DB_NAME=<your_database_name>
+DB_HOST=<your_database_host>
+```
+Replace `<your_database_username>`, `<your_database_password>`, `<your_database_name>`, and `<your_database_host>` with the appropriate values for your PostgreSQL configuration.
+
+Make sure to create a postgresql database and add the name of your database.
+
+## Migrations
+
+Apply the database migrations to create the necessary tables. Run the following command:
+
+```bash
+flask db upgrade
+```
+
+## Running the Application
+
+Ensure you have activated the virtual environment.
+
+In the project root directory, run the following command:
+
+```bash
+python main.py
+```
+This will run the script in your terminal and normalize the excel data, adding it to your database
 
 ## Contributing
 
