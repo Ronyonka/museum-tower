@@ -20,7 +20,11 @@ Before getting started, ensure you have the following prerequisites installed:
 ```bash
 cd museum-tower
 ```
-3. Activate the virtual environment:
+3. Create a virtual environment file:
+```bash
+python3 -m venv venv
+```
+4. Activate the virtual environment:
 
 For macOS/Linux:
 
@@ -32,7 +36,7 @@ For Windows:
 ```bash
 venv\Scripts\activate
 ```
-4. Install the required packages from the requirements.txt file:
+5. Install the required packages from the requirements.txt file:
 ```bash
 pip install -r requirements.txt
 ```
