@@ -14,7 +14,7 @@ def parse_excel_data(file_path):
         df = pd.read_excel(file_path)
         print("Give me a moment to Normalize this Data!")
         # Loop through each row in the DataFrame
-        for index, row in df.iterrows():
+        for row in df.iterrows():
             if 'tenant' in str(row[0]).lower():
                 # Create or update the Tenant model
                 tenant = Tenant()
